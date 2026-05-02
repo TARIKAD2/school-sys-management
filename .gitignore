@@ -1,0 +1,22 @@
+# Root level ignore
+node_modules/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backend ignore
+backend/node_modules/
+backend/.env
+backend/uploads/
+
+# Frontend ignore
+frontend/node_modules/
+frontend/.env
+frontend/build/
+frontend/.env.local
+
+# System files
+.DS_Store
+Thumbs.db
