@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../../../api/client";
+import api, { BASE_URL } from "../../../api/client";
 import { Book, Calendar, Clock, Download, FileText, Layout, MessageSquare, Send } from "lucide-react";
 
 export default function StudentELearningPage() {
@@ -116,7 +116,7 @@ export default function StudentELearningPage() {
                                 <div className="small text-muted">{lesson.content}</div>
                               </div>
                             </div>
-                            <a href={`http://localhost:5000${lesson.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-outline-primary btn-sm rounded-pill px-3">
+                            <a href={`${BASE_URL}${lesson.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-outline-primary btn-sm rounded-pill px-3">
                               <Download size={14} className="me-1" /> View
                             </a>
                           </div>

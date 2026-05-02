@@ -40,7 +40,7 @@ async function start() {
 
   io.on("connection", (socket) => {
     // Automatically join the exact verified user ID room 
-    const secureUserId = socket.user.id || socket.user._id;
+    const secureUserId = socket.user.sub;
     socket.join(secureUserId.toString());
     
     console.log(`Socket securely connected & locked to room: ${secureUserId}`);

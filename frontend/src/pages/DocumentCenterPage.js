@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../api/client";
+import api, { BASE_URL } from "../api/client";
 import { Download, FileText, Plus, Search, Trash } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 
@@ -96,7 +96,7 @@ export default function DocumentCenterPage() {
                     <td className="py-3 small text-muted">{new Date(doc.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3 text-end">
                       <div className="d-flex gap-2 justify-content-end">
-                        <a href={`http://localhost:5000${doc.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-light btn-sm">
+                        <a href={`${BASE_URL}${doc.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-light btn-sm">
                           <Download size={16} />
                         </a>
                         {(user.role === 'admin' || user._id === doc.createdBy) && (

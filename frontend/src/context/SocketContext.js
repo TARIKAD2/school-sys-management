@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "../auth/AuthContext";
+import { BASE_URL } from "../api/client";
 
 const SocketContext = createContext(null);
 
@@ -19,7 +20,7 @@ export function SocketProvider({ children }) {
 
     if (!socketRef.current) {
       const token = localStorage.getItem("psms_token");
-      socketRef.current = io(process.env.REACT_APP_API_URL || "http://localhost:5000", {
+      socketRef.current = io(BASE_URL, {
         auth: { token },
       });
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../../../api/client";
+import api, { BASE_URL } from "../../../api/client";
 import { BookOpen, Clock, FileUp, Layout, Plus, Send, Users } from "lucide-react";
 
 export default function TeacherELearningPage() {
@@ -120,7 +120,7 @@ export default function TeacherELearningPage() {
                                 <div className="small text-muted">{new Date(lesson.createdAt).toLocaleDateString()}</div>
                               </div>
                             </div>
-                            <a href={`http://localhost:5000${lesson.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-light btn-sm">View</a>
+                            <a href={`${BASE_URL}${lesson.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-light btn-sm">View</a>
                           </div>
                         </div>
                       ))}
