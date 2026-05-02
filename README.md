@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏫 Bright Future Academy - Professional School Management System
 
 A premium, full-stack MERN (MongoDB, Express, React, Node) application designed for modern educational institutions. This system provides a unified, real-time platform for Administrators, Teachers, Students, and Secretaries to manage the entire academic and financial lifecycle.
@@ -87,3 +88,6 @@ To update real-time logic, modify the `io.on("connection")` block in `backend/sr
 
 > [!IMPORTANT]
 > To quickly populate the system with data, run `npm run seed:demo` in the `backend/` directory. This will generate sample users, invoices, lessons, and grades for testing.
+=======
+# school-sys-management
+>>>>>>> 44c1a9dc94db7edcad802c0a31463087702bbcde
