@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu as MenuIcon, Bell } from 'lucide-react';
+import { Menu as MenuIcon } from 'lucide-react';
 import NotificationBell from '../NotificationBell';
 
 export default function MobileHeader({ onMenuClick, title }) {
