@@ -200,40 +200,40 @@ function TeacherModal({ open, mode, teacher, onClose, onSaved }) {
                 <h6 className="fw-bold mb-3">RBAC Assignments</h6>
                 <div className="row g-3">
                   <div className="col-12">
-                     <label className="form-label small text-muted fw-bold">Assigned Classes</label>
-                     <div className="border rounded-3 p-2 bg-light bg-opacity-50" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                        {classes.map(c => (
-                          <div key={c._id} className="form-check mb-1">
-                            <input 
-                              className="form-check-input" 
-                              type="checkbox" 
-                              id={`cls-${c._id}`} 
-                              disabled={isView}
-                              checked={form.assignedClasses.includes(c._id)}
-                              onChange={() => toggleItem('assignedClasses', c._id)}
-                            />
-                            <label className="form-check-label small" htmlFor={`cls-${c._id}`}>{c.name}</label>
-                          </div>
-                        ))}
-                     </div>
+                    <label className="form-label small text-muted fw-bold">Assigned Classes</label>
+                    <div className="border rounded-3 p-2 bg-light bg-opacity-50" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+                      {classes.map(c => (
+                        <div key={c._id} className="form-check mb-1">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={`cls-${c._id}`}
+                            disabled={isView}
+                            checked={form.assignedClasses.includes(c._id)}
+                            onChange={() => toggleItem('assignedClasses', c._id)}
+                          />
+                          <label className="form-check-label small" htmlFor={`cls-${c._id}`}>{c.name}</label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <div className="col-12">
-                     <label className="form-label small text-muted fw-bold">Assigned Modules</label>
-                     <div className="border rounded-3 p-2 bg-light bg-opacity-50" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                        {modules.map(m => (
-                          <div key={m._id} className="form-check mb-1">
-                            <input 
-                              className="form-check-input" 
-                              type="checkbox" 
-                              id={`mod-${m._id}`} 
-                              disabled={isView}
-                              checked={form.assignedModules.includes(m._id)}
-                              onChange={() => toggleItem('assignedModules', m._id)}
-                            />
-                            <label className="form-check-label small" htmlFor={`mod-${m._id}`}>[{m.code}] {m.name}</label>
-                          </div>
-                        ))}
-                     </div>
+                    <label className="form-label small text-muted fw-bold">Assigned Modules</label>
+                    <div className="border rounded-3 p-2 bg-light bg-opacity-50" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+                      {modules.map(m => (
+                        <div key={m._id} className="form-check mb-1">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={`mod-${m._id}`}
+                            disabled={isView}
+                            checked={form.assignedModules.includes(m._id)}
+                            onChange={() => toggleItem('assignedModules', m._id)}
+                          />
+                          <label className="form-check-label small" htmlFor={`mod-${m._id}`}>[{m.code}] {m.name}</label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

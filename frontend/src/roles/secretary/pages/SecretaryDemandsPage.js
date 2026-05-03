@@ -41,7 +41,7 @@ export default function SecretaryDemandsPage() {
   useEffect(() => {
     api.get("/classes?limit=200&sort=name").then(({ data }) => {
       setClasses(data.items || []);
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -51,14 +51,14 @@ export default function SecretaryDemandsPage() {
   // Handle cross-role Demand Synchronization Live Updates 
   useEffect(() => {
     if (!socket) return;
-    
+
     const handleDemandRead = (demandId) => {
       setDemands(prev => prev.map(d => d._id === demandId ? { ...d, status: "read" } : d));
     };
 
     socket.on("demand_read", handleDemandRead);
     socket.on("connect", loadDemands); // Resync if drops
-    
+
     return () => {
       socket.off("demand_read", handleDemandRead);
       socket.off("connect", loadDemands);
@@ -68,7 +68,7 @@ export default function SecretaryDemandsPage() {
   async function searchRecipients() {
     // If searching teachers, we can search with empty string to get all
     if (recipientType === "student" && search.length < 2) return;
-    
+
     try {
       if (recipientType === "student") {
         const params = { q: search, limit: 10 };
@@ -116,8 +116,8 @@ export default function SecretaryDemandsPage() {
     setSending(true);
     setFeedback({ type: "", msg: "" });
     try {
-      const payload = { 
-        message, 
+      const payload = {
+        message,
         recipientType,
         studentId: recipientType === "student" ? selectedStudent._id : undefined,
         teacherId: recipientType === "teacher" ? selectedTeacher._id : undefined
@@ -282,7 +282,7 @@ export default function SecretaryDemandsPage() {
                                 <div className="text-muted small">{t.teacherId}</div>
                               </td>
                               <td className="text-end">
-                                <button 
+                                <button
                                   className="btn btn-sm btn-outline-primary rounded-pill px-3"
                                   onClick={() => setSelectedTeacher(t)}
                                 >
@@ -404,13 +404,12 @@ export default function SecretaryDemandsPage() {
                             </td>
                             <td>
                               <span
-                                className={`badge rounded-pill ${
-                                  d.status === "pending"
+                                className={`badge rounded-pill ${d.status === "pending"
                                     ? "bg-warning text-dark"
                                     : d.status === "read"
-                                    ? "bg-info text-dark"
-                                    : "bg-success"
-                                }`}
+                                      ? "bg-info text-dark"
+                                      : "bg-success"
+                                  }`}
                               >
                                 {d.status}
                               </span>

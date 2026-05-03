@@ -49,7 +49,7 @@ export default function SecretaryAttendancePage() {
       try {
         const { data } = await api.get(`/students?classId=${selectedClassId}&limit=500`);
         setStudents(data.items || []);
-        
+
         // Initialize all as present
         const initial = {};
         (data.items || []).forEach(s => {
@@ -98,7 +98,7 @@ export default function SecretaryAttendancePage() {
       }));
 
       await api.put(`/attendance/${sheet.item._id}/records`, { records: recordsToSave });
-      
+
       setSuccess("Attendance successfully recorded!");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
@@ -109,23 +109,23 @@ export default function SecretaryAttendancePage() {
   }
 
   return (
-    <div className="container-fluid pb-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3 className="fw-bold d-flex align-items-center gap-2">
+    <div className="container-fluid pb-5 px-md-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <h3 className="fw-bold d-flex align-items-center gap-2 mb-0">
           <UserCheck size={28} className="text-primary" />
           Attendance Management
         </h3>
-        <div className="d-flex gap-3 align-items-center bg-white p-2 px-3 rounded-4 shadow-sm border">
+        <div className="d-flex gap-3 align-items-center bg-white p-2 px-3 rounded-4 shadow-sm border" style={{ maxWidth: 'fit-content' }}>
           <div className="d-flex align-items-center gap-2">
             <Clock size={16} className="text-muted" />
             <label className="small text-muted fw-bold mb-0">DATE:</label>
           </div>
-          <input 
-            type="date" 
-            className="form-control form-control-sm border-0 fw-bold" 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-            style={{ width: '130px' }}
+          <input
+            type="date"
+            className="form-control form-control-sm border-0 fw-bold p-0"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            style={{ width: '120px', background: 'transparent' }}
           />
         </div>
       </div>
@@ -140,9 +140,9 @@ export default function SecretaryAttendancePage() {
               <label className="form-label text-muted small fw-bold d-flex align-items-center gap-2">
                 <Users size={14} /> 1. SELECT CLASS
               </label>
-              <select 
-                className="form-select border-0 bg-light rounded-3 py-2" 
-                value={selectedClassId} 
+              <select
+                className="form-select border-0 bg-light rounded-3 py-2"
+                value={selectedClassId}
                 onChange={(e) => setSelectedClassId(e.target.value)}
                 disabled={loadingClasses}
               >
@@ -156,9 +156,9 @@ export default function SecretaryAttendancePage() {
               <label className="form-label text-muted small fw-bold d-flex align-items-center gap-2">
                 <BookOpen size={14} /> 2. SELECT MODULE (Optional)
               </label>
-              <select 
-                className="form-select border-0 bg-light rounded-3 py-2" 
-                value={selectedModuleId} 
+              <select
+                className="form-select border-0 bg-light rounded-3 py-2"
+                value={selectedModuleId}
                 onChange={(e) => setSelectedModuleId(e.target.value)}
               >
                 <option value="">Choose a module...</option>
@@ -168,15 +168,15 @@ export default function SecretaryAttendancePage() {
               </select>
             </div>
             <div className="col-12 col-md-2">
-               <button 
-                 className="btn btn-primary w-100 py-2 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 fw-bold" 
-                 onClick={saveAttendance}
-                 disabled={saving || !selectedClassId || students.length === 0}
-               >
-                 {saving ? (
-                   <span className="spinner-border spinner-border-sm" role="status"></span>
-                 ) : "Save Sheet"}
-               </button>
+              <button
+                className="btn btn-primary w-100 py-2 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 fw-bold"
+                onClick={saveAttendance}
+                disabled={saving || !selectedClassId || students.length === 0}
+              >
+                {saving ? (
+                  <span className="spinner-border spinner-border-sm" role="status"></span>
+                ) : "Save Sheet"}
+              </button>
             </div>
           </div>
         </div>
@@ -240,7 +240,7 @@ export default function SecretaryAttendancePage() {
                         <td className="text-center">
                           <div className="d-flex justify-content-center gap-1">
                             {['present', 'absent', 'late'].map(st => (
-                              <button 
+                              <button
                                 key={st}
                                 className={`btn btn-sm px-2 rounded-pill font-monospace ${record.status === st ? (st === 'present' ? 'btn-success' : st === 'absent' ? 'btn-danger' : 'btn-warning') + ' shadow-sm' : 'btn-outline-secondary'}`}
                                 onClick={() => updateRecord(s._id, { status: st })}
@@ -254,15 +254,15 @@ export default function SecretaryAttendancePage() {
                         <td>
                           {record.status !== 'present' ? (
                             <div className="d-flex gap-2">
-                              <input 
-                                type="time" 
-                                className="form-control form-control-sm border-0 bg-light" 
+                              <input
+                                type="time"
+                                className="form-control form-control-sm border-0 bg-light"
                                 value={record.absenceTime || ""}
                                 title="Time"
                                 onChange={(e) => updateRecord(s._id, { absenceTime: e.target.value })}
                                 style={{ fontSize: '11px', width: '85px' }}
                               />
-                              <select 
+                              <select
                                 className="form-select form-select-sm border-0 bg-light"
                                 value={record.absenceType || "unjustified"}
                                 onChange={(e) => updateRecord(s._id, { absenceType: e.target.value })}
@@ -277,9 +277,9 @@ export default function SecretaryAttendancePage() {
                           ) : <span className="text-muted small opacity-50 font-monospace">—</span>}
                         </td>
                         <td>
-                          <input 
-                            type="text" 
-                            className="form-control form-control-sm border-0 bg-light" 
+                          <input
+                            type="text"
+                            className="form-control form-control-sm border-0 bg-light"
                             placeholder="Add a note..."
                             value={record.note}
                             onChange={(e) => updateRecord(s._id, { note: e.target.value })}
@@ -287,7 +287,7 @@ export default function SecretaryAttendancePage() {
                           />
                         </td>
                         <td className="pe-4 text-end">
-                          <button 
+                          <button
                             className={`btn btn-sm border-0 rounded-circle ${record.status === 'present' ? 'text-danger' : 'text-success'}`}
                             onClick={() => updateRecord(s._id, { status: record.status === 'present' ? 'absent' : 'present' })}
                           >

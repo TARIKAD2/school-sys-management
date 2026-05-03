@@ -119,28 +119,28 @@ export default function SecretaryFinancePage() {
     );
   });
 
-  if (loading) return <div className="p-5 text-center"><div className="spinner-border text-primary"/></div>;
+  if (loading) return <div className="p-5 text-center"><div className="spinner-border text-primary" /></div>;
 
   return (
-    <div className="container-fluid p-4">
+    <div className="container-fluid p-3 p-md-4 px-md-5">
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-start mb-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
           <h2 className="fw-bold mb-1">Financial Management</h2>
           <p className="text-muted mb-0">Track tuition, manage partial payments, and issue student statements.</p>
         </div>
-        <button className="btn btn-primary d-flex align-items-center gap-2" onClick={() => setShowCreateModal(true)}>
-          <Plus size={18}/> New Invoice
+        <button className="btn btn-primary d-flex align-items-center justify-content-center gap-2 py-2 px-4 shadow-sm" onClick={() => setShowCreateModal(true)}>
+          <Plus size={20} /> <span className="fw-bold">New Invoice</span>
         </button>
       </div>
 
       {/* Stats Cards */}
       <div className="row g-3 mb-4">
         {[
-          { label: "Total Revenue", value: `$${stats.totalRevenue.toLocaleString()}`, icon: <CheckCircle size={22}/>, color: "primary", subtitle: `${stats.collectedPercentage}% Collected` },
-          { label: "Collected Cash", value: `$${stats.collected.toLocaleString()}`, icon: <CreditCard size={22}/>, color: "success" },
-          { label: "Pending Balance", value: `$${stats.pending.toLocaleString()}`, icon: <Clock size={22}/>, color: "warning" },
-          { label: "Unpaid Invoices", value: invoices.filter(i => i.status !== "paid").length, icon: <AlertCircle size={22}/>, color: "danger" },
+          { label: "Total Revenue", value: `$${stats.totalRevenue.toLocaleString()}`, icon: <CheckCircle size={22} />, color: "primary", subtitle: `${stats.collectedPercentage}% Collected` },
+          { label: "Collected Cash", value: `$${stats.collected.toLocaleString()}`, icon: <CreditCard size={22} />, color: "success" },
+          { label: "Pending Balance", value: `$${stats.pending.toLocaleString()}`, icon: <Clock size={22} />, color: "warning" },
+          { label: "Unpaid Invoices", value: invoices.filter(i => i.status !== "paid").length, icon: <AlertCircle size={22} />, color: "danger" },
         ].map((s, i) => (
           <div key={i} className="col-6 col-md-3">
             <div className="card border-0 shadow-sm p-3 bg-white h-100">
@@ -158,7 +158,7 @@ export default function SecretaryFinancePage() {
       {/* Main Content */}
       <div className="card border-0 shadow-sm">
         <div className="card-header bg-white py-3 border-0 d-flex align-items-center gap-2">
-          <Search size={16} className="text-muted"/>
+          <Search size={16} className="text-muted" />
           <input
             className="form-control border-0 shadow-none"
             placeholder="Search students or invoices…"
@@ -186,7 +186,7 @@ export default function SecretaryFinancePage() {
                   const netTotal = inv.amount - (inv.discountAmount || 0);
                   const remaining = netTotal - (inv.paidAmount || 0);
                   const progress = Math.min(100, Math.round(((inv.paidAmount || 0) / netTotal) * 100));
-                  
+
                   return (
                     <tr key={inv._id}>
                       <td className="px-4 py-3">
@@ -203,8 +203,8 @@ export default function SecretaryFinancePage() {
                           <span className="text-muted">{progress}%</span>
                         </div>
                         <div className="progress" style={{ height: "6px" }}>
-                          <div 
-                            className={`progress-bar bg-${progress === 100 ? 'success' : 'primary'}`} 
+                          <div
+                            className={`progress-bar bg-${progress === 100 ? 'success' : 'primary'}`}
                             style={{ width: `${progress}%` }}
                           />
                         </div>
@@ -212,26 +212,25 @@ export default function SecretaryFinancePage() {
                       </td>
                       <td className="py-3 small text-muted">{new Date(inv.dueDate).toLocaleDateString()}</td>
                       <td className="py-3">
-                        <span className={`badge rounded-pill px-3 py-2 ${
-                          inv.status === "paid" ? "bg-success-subtle text-success" :
-                          inv.status === "partial" ? "bg-info-subtle text-info" : 
-                          inv.status === "pending" ? "bg-warning-subtle text-warning" : "bg-danger-subtle text-danger"
-                        }`}>{inv.status.toUpperCase()}</span>
+                        <span className={`badge rounded-pill px-3 py-2 ${inv.status === "paid" ? "bg-success-subtle text-success" :
+                            inv.status === "partial" ? "bg-info-subtle text-info" :
+                              inv.status === "pending" ? "bg-warning-subtle text-warning" : "bg-danger-subtle text-danger"
+                          }`}>{inv.status.toUpperCase()}</span>
                       </td>
                       <td className="px-4 py-3 text-end">
                         <div className="d-flex gap-2 justify-content-end">
                           <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" onClick={() => printReceipt(inv)}>
-                            <Printer size={14}/> Statement
+                            <Printer size={14} /> Statement
                           </button>
                           {inv.status !== "paid" && (
-                            <button 
-                              className="btn btn-success btn-sm d-flex align-items-center gap-1" 
-                              onClick={() => { 
-                                setShowPayModal(inv); 
-                                setPayData({ amount: remaining, method: "cash" }); 
+                            <button
+                              className="btn btn-success btn-sm d-flex align-items-center gap-1"
+                              onClick={() => {
+                                setShowPayModal(inv);
+                                setPayData({ amount: remaining, method: "cash" });
                               }}
                             >
-                              <CreditCard size={14}/> Pay
+                              <CreditCard size={14} /> Pay
                             </button>
                           )}
                         </div>
@@ -252,13 +251,13 @@ export default function SecretaryFinancePage() {
             <div className="modal-content border-0 shadow">
               <div className="modal-header">
                 <h5 className="modal-title fw-bold">Issue New Charge</h5>
-                <button className="btn-close" onClick={() => setShowCreateModal(false)}/>
+                <button className="btn-close" onClick={() => setShowCreateModal(false)} />
               </div>
               <form onSubmit={handleCreateInvoice}>
                 <div className="modal-body">
                   <div className="mb-3">
                     <label className="form-label small fw-semibold text-muted text-uppercase">Student</label>
-                    <select className="form-select" required value={formData.studentId} onChange={e => setFormData({...formData, studentId: e.target.value})}>
+                    <select className="form-select" required value={formData.studentId} onChange={e => setFormData({ ...formData, studentId: e.target.value })}>
                       <option value="">Search student for billing…</option>
                       {students.map(s => (
                         <option key={s._id} value={s._id}>{s.user?.name} ({s.studentId})</option>
@@ -267,17 +266,17 @@ export default function SecretaryFinancePage() {
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-semibold text-muted text-uppercase">Reason for Charge</label>
-                    <input className="form-control" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})}/>
+                    <input className="form-control" required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
                   </div>
                   <div className="row">
                     <div className="col-6 mb-3">
                       <label className="form-label small fw-semibold text-muted text-uppercase">Base Amount ($)</label>
-                      <input type="number" min="1" className="form-control" required value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})}/>
+                      <input type="number" min="1" className="form-control" required value={formData.amount} onChange={e => setFormData({ ...formData, amount: e.target.value })} />
                       <div className="smaller text-muted mt-1">Discounts will be applied automatically.</div>
                     </div>
                     <div className="col-6 mb-3">
                       <label className="form-label small fw-semibold text-muted text-uppercase">Deadline</label>
-                      <input type="date" className="form-control" required value={formData.dueDate} onChange={e => setFormData({...formData, dueDate: e.target.value})}/>
+                      <input type="date" className="form-control" required value={formData.dueDate} onChange={e => setFormData({ ...formData, dueDate: e.target.value })} />
                     </div>
                   </div>
                 </div>
@@ -298,40 +297,40 @@ export default function SecretaryFinancePage() {
             <div className="modal-content border-0 shadow">
               <div className="modal-header">
                 <h5 className="modal-title fw-bold">Manual Payment Receipt</h5>
-                <button className="btn-close" onClick={() => setShowPayModal(null)}/>
+                <button className="btn-close" onClick={() => setShowPayModal(null)} />
               </div>
               <form onSubmit={handleRecordPayment}>
                 <div className="modal-body text-center py-4">
                   <div className="avatar mb-3 mx-auto bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: "60px", height: "60px" }}>
-                    <CreditCard size={30}/>
+                    <CreditCard size={30} />
                   </div>
                   <h6 className="fw-bold mb-1">{showPayModal.student?.user?.name}</h6>
                   <p className="text-muted small mb-4">{showPayModal.title}</p>
-                  
+
                   <div className="text-start">
                     <div className="mb-3">
                       <label className="form-label small fw-semibold">Amount to record ($)</label>
-                      <input 
-                        type="number" 
-                        min="1" 
-                        max={showPayModal.amount - (showPayModal.discountAmount || 0) - (showPayModal.paidAmount || 0)} 
-                        className="form-control form-control-lg text-center fw-bold" 
-                        required 
-                        value={payData.amount} 
-                        onChange={e => setPayData({...payData, amount: e.target.value})}
+                      <input
+                        type="number"
+                        min="1"
+                        max={showPayModal.amount - (showPayModal.discountAmount || 0) - (showPayModal.paidAmount || 0)}
+                        className="form-control form-control-lg text-center fw-bold"
+                        required
+                        value={payData.amount}
+                        onChange={e => setPayData({ ...payData, amount: e.target.value })}
                       />
                     </div>
                     <div className="mb-3 text-center">
                       <div className="btn-group w-100" role="group">
                         {['cash', 'card', 'transfer'].map(m => (
                           <React.Fragment key={m}>
-                            <input 
-                              type="radio" 
-                              className="btn-check" 
-                              name="method" 
-                              id={`method-${m}`} 
+                            <input
+                              type="radio"
+                              className="btn-check"
+                              name="method"
+                              id={`method-${m}`}
                               checked={payData.method === m}
-                              onChange={() => setPayData({ ...payData, method: m })} 
+                              onChange={() => setPayData({ ...payData, method: m })}
                             />
                             <label className="btn btn-outline-primary text-capitalize" htmlFor={`method-${m}`}>{m}</label>
                           </React.Fragment>

@@ -251,8 +251,8 @@ function StudentModal({ open, mode, student, classes, onClose, onSaved }) {
                     <div className="row g-2">
                       <div className="col-md-6">
                         <label className="small text-muted mb-1">Benefit Type</label>
-                        <select 
-                          className="form-select form-select-sm" 
+                        <select
+                          className="form-select form-select-sm"
                           disabled={isView}
                           value={form.discountType}
                           onChange={e => setForm(f => ({ ...f, discountType: e.target.value }))}
@@ -265,7 +265,7 @@ function StudentModal({ open, mode, student, classes, onClose, onSaved }) {
                       {form.discountType !== "none" && (
                         <div className="col-md-6">
                           <label className="small text-muted mb-1">Benefit Value</label>
-                          <input 
+                          <input
                             type="number"
                             className="form-control form-control-sm"
                             disabled={isView}
