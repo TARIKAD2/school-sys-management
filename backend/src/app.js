@@ -54,6 +54,8 @@ app.use(
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+app.get("/", (req, res) => res.json({ message: "API is running" }));
+app.get("/api", (req, res) => res.json({ message: "API base route working" }));
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 app.use("/api/auth", authRoutes);
