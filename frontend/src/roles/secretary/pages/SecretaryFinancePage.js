@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../../api/client";
-import { CreditCard, Plus, Search, FileText, CheckCircle, Clock, AlertCircle, Printer } from "lucide-react";
+import { CreditCard, Plus, Search, CheckCircle, Clock, AlertCircle, Printer } from "lucide-react";
 
 export default function SecretaryFinancePage() {
   const [stats, setStats] = useState({ totalRevenue: 0, collected: 0, pending: 0, collectedPercentage: 0 });

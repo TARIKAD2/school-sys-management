@@ -44,7 +44,7 @@ export default function NotificationBell() {
       socket.off("notification", handleNewNotif);
       socket.off("sync_notifications", fetchNotifications);
     };
-  }, [socket]);
+  }, [socket, fetchNotifications]);
 
   useEffect(() => {
     function handle(e) {

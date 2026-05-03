@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import api from "../../../api/client";
 import PaginationBar from "../../../components/PaginationBar";
 import { GraduationCap, Search, PlusCircle, CheckCircle, AlertCircle } from "lucide-react";
@@ -161,19 +161,17 @@ function GradeModal({ open, classes, onClose, onSaved }) {
 
 export default function TeacherGradesPage() {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [sort, setSort] = useState("-createdAt");
   const [items, setItems] = useState([]);
   const [pages, setPages] = useState(1);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [classes, setClasses] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const params = useMemo(() => ({ page, limit, sort }), [page, limit, sort]);
+  const params = useMemo(() => ({ page, limit: 10, sort }), [page, sort]);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -183,18 +181,17 @@ export default function TeacherGradesPage() {
       ]);
       setItems(grades.items || []);
       setPages(grades.pages || 1);
-      setTotal(grades.total || 0);
       setClasses(cls.items || []);
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to load grades");
     } finally {
       setLoading(false);
     }
-  }
+  }, [params]);
 
   useEffect(() => {
     load();
-  }, [params]);
+  }, [load]);
 
   async function onDelete(item) {
     if (!window.confirm("Delete this grade record?")) return;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../../api/client";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend
+  CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from "recharts";
 import { Activity, TrendingUp, UserCheck, Users } from "lucide-react";
 

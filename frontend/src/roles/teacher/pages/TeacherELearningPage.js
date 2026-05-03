@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api, { BASE_URL } from "../../../api/client";
-import { BookOpen, Clock, FileUp, Layout, Plus, Send, Users } from "lucide-react";
+import { BookOpen, FileUp, Layout, Send, Users } from "lucide-react";
 
 export default function TeacherELearningPage() {
   const [modules, setModules] = useState([]);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api, { BASE_URL } from "../api/client";
-import { Download, FileText, Plus, Search, Trash } from "lucide-react";
+import { Download, FileText, Plus, Trash } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 
 export default function DocumentCenterPage() {

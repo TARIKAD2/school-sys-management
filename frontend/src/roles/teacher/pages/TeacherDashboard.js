@@ -9,8 +9,7 @@ export default function TeacherDashboard() {
   const [recentNotifications, setRecentNotifications] = useState([]);
   const socket = useSocket();
 
-  const loadApiData = useCallback(async () => {
-    let mounted = true;
+  const loadApiData = useCallback(async (mounted = { current: true }) => {
     try {
       const [students, exams, attendance, grades, schedule, notifs] = await Promise.all([
         api.get("/students?limit=1"),
@@ -21,7 +20,7 @@ export default function TeacherDashboard() {
         api.get("/notifications?limit=5")
       ]);
       
-      if (mounted) {
+      if (mounted.current) {
         setStats({
           students: students.data.total || 0,
           exams: exams.data.total || 0,
@@ -34,14 +33,14 @@ export default function TeacherDashboard() {
     } catch (e) {
       console.error(e);
     } finally {
-      if (mounted) setLoading(false);
+      if (mounted.current) setLoading(false);
     }
-    return () => mounted = false;
   }, []);
 
   useEffect(() => {
-    const cleanup = loadApiData();
-    // Return early if cleanup is not a function (i.e. async function returned promise)
+    const mounted = { current: true };
+    loadApiData(mounted);
+    return () => { mounted.current = false; };
   }, [loadApiData]);
 
   useEffect(() => {
@@ -59,15 +58,15 @@ export default function TeacherDashboard() {
     socket.on("notification", handleNewNotif);
     
     // Automatically refetch latest notifications & stats if socket reconnects
-    socket.on("connect", loadApiData);
+    socket.on("connect", () => loadApiData());
     
     // Auto-resync when a message is read in another component
-    socket.on("sync_notifications", loadApiData);
+    socket.on("sync_notifications", () => loadApiData());
 
     return () => {
       socket.off("notification", handleNewNotif);
-      socket.off("connect", loadApiData);
-      socket.off("sync_notifications", loadApiData);
+      socket.off("connect", () => loadApiData());
+      socket.off("sync_notifications", () => loadApiData());
     };
   }, [socket, loadApiData]);
 

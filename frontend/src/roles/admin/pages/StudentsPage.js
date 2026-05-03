@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import api from "../../../api/client";
 import PaginationBar from "../../../components/PaginationBar";
 
@@ -338,7 +338,7 @@ export default function StudentsPage() {
     return params;
   }, [q, classId, page, limit, sort]);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -355,12 +355,11 @@ export default function StudentsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [queryParams]);
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryParams]);
+  }, [load]);
 
   async function onDelete(student) {
     // eslint-disable-next-line no-alert

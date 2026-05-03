@@ -9,8 +9,7 @@ export default function StudentDashboard() {
   const [recentNotifications, setRecentNotifications] = useState([]);
   const socket = useSocket();
 
-  const loadApiData = useCallback(async () => {
-    let mounted = true;
+  const loadApiData = useCallback(async (mounted = { current: true }) => {
     try {
       const [
         { data: sData }, 
@@ -20,21 +19,21 @@ export default function StudentDashboard() {
         api.get("/notifications?limit=5")
       ]);
       
-      if (mounted) {
+      if (mounted.current) {
         setStudent(sData.student);
         setRecentNotifications(nData.data || []);
       }
     } catch (e) {
       console.error(e);
     } finally {
-      if (mounted) setLoading(false);
+      if (mounted.current) setLoading(false);
     }
-    return () => mounted = false;
   }, []);
 
   useEffect(() => {
-    const cleanup = loadApiData();
-    // Return early if cleanup is not a function (i.e. async function returned promise)
+    const mounted = { current: true };
+    loadApiData(mounted);
+    return () => { mounted.current = false; };
   }, [loadApiData]);
 
   useEffect(() => {
@@ -52,15 +51,15 @@ export default function StudentDashboard() {
     socket.on("notification", handleNewNotif);
     
     // Automatically refetch latest notifications if socket reconnects
-    socket.on("connect", loadApiData);
+    socket.on("connect", () => loadApiData());
     
     // Auto-resync when a message is read in another component
-    socket.on("sync_notifications", loadApiData);
+    socket.on("sync_notifications", () => loadApiData());
 
     return () => {
       socket.off("notification", handleNewNotif);
-      socket.off("connect", loadApiData);
-      socket.off("sync_notifications", loadApiData);
+      socket.off("connect", () => loadApiData());
+      socket.off("sync_notifications", () => loadApiData());
     };
   }, [socket, loadApiData]);
 

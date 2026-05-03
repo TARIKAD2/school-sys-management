@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api/client";
-import { Users, BookOpen, MessageSquare, PieChart, ArrowUpRight, Clock, ShieldCheck } from "lucide-react";
+import { Users, BookOpen, MessageSquare, ArrowUpRight, Clock } from "lucide-react";
 import { useAuth } from "../../../auth/AuthContext";
 
 export default function SecretaryDashboard() {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api, { BASE_URL } from "../../../api/client";
-import { Book, Calendar, Clock, Download, FileText, Layout, MessageSquare, Send } from "lucide-react";
+import { Book, Calendar, Clock, Download, FileText, Send } from "lucide-react";
 
 export default function StudentELearningPage() {
   const [modules, setModules] = useState([]);

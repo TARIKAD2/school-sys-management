@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/client";
-import { Calendar, ChevronLeft, ChevronRight, Clock, MapPin, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 
 export default function SchoolCalendar() {
   const [events, setEvents] = useState([]);

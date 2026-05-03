@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api/client";
-import { CreditCard, Download, FileText, HelpCircle, ShieldCheck } from "lucide-react";
+import { CreditCard, FileText, ShieldCheck } from "lucide-react";
 
 export default function StudentPaymentsPage() {
   const [invoices, setInvoices] = useState([]);
