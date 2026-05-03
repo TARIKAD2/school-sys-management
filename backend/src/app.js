@@ -31,13 +31,22 @@ const app = express();
 
 app.set("trust proxy", 1);
 
-app.use(helmet());
-app.use(
-  cors({
-    origin: env.CORS_ORIGIN ? env.CORS_ORIGIN.split(",") : true,
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: [
+    "https://school-sys-management.vercel.app",
+    "http://localhost:3000"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  optionsSuccessStatus: 204
+}));
+
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: { policy: "unsafe-none" }
+}));
+
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
