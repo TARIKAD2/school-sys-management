@@ -1,93 +1,70 @@
-<<<<<<< HEAD
-# 🏫 Bright Future Academy - Professional School Management System
+# 🏫 Bright Future Academy - School Management System
 
-A premium, full-stack MERN (MongoDB, Express, React, Node) application designed for modern educational institutions. This system provides a unified, real-time platform for Administrators, Teachers, Students, and Secretaries to manage the entire academic and financial lifecycle.
-
----
-
-## 🚀 Quick Start (Docker)
-
-The fastest way to get the system running is using Docker Compose.
-
-1. **Prerequisites**: [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
-2. **Setup Environment**:
-   ```powershell
-   copy .env.example .env
-   ```
-3. **Launch**:
-   ```powershell
-   docker-compose up --build
-   ```
-4. **Access**:
-   - Frontend: `http://localhost:3000`
-   - Backend Health: `http://localhost:5000/api/health`
+A premium, full-stack MERN (MongoDB, Express, React, Node) application designed for modern educational institutions. This system provides a unified, real-time platform for Administrators, Teachers, Students, and Secretaries.
 
 ---
 
-## 🏗️ System Architecture & Features
+## 🏗️ System Architecture
+The system is built on a modular architecture optimized for high-performance cloud deployment.
 
-The system is built on a modular architecture with real-time capabilities and a high-end SaaS aesthetic.
-
-### 🧩 Core Modules
-- **💳 Payment & Billing**: Full tuition management. Admins generate invoices; students track payments and download receipts.
-- **📚 E-Learning Hub**: Digital classroom where teachers upload lessons and assignments, and students submit work for grading.
-- **📊 Advanced Analytics**: Real-time performance tracking using dynamic charts (Area, Pie, Bar) for attendance and grades.
-- **📢 Real-time Notifications**: Instant alerts via **WebSockets** for messages, new grades, and administrative demands.
-- **📅 Events & Calendar**: A shared school-wide calendar for scheduling exams, holidays, and meetings.
-- **🧾 Document Management**: Secure vault for student certificates, staff contracts, and administrative records.
-
-### 🏛️ Role-Based Workflows
-- **Admin**: Oversight of all metrics, financial management, staff/student lifecycle, and institutional settings.
-- **Teacher**: Lesson planning, assignment grading, attendance tracking, and student performance analysis.
-- **Secretary**: Administrative registration, messaging "Demands" to students/teachers, and document handling.
-- **Student**: Personal academic portal for lessons, grades, payments, and private schedule tracking.
+```mermaid
+graph TD
+    User((User Browser))
+    V[Vercel Frontend]
+    R[Railway Backend]
+    M[MongoDB Atlas]
+    
+    User -- HTTPS --> V
+    V -- API Calls --> R
+    V -- WebSockets --> R
+    R -- Drivers --> M
+```
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+## 🚀 Deployment Guide (Production)
 
-| Category | Technology |
-| :--- | :--- |
-| **Engine** | Node.js (v20+) / Express.js |
-| **Database** | MongoDB / Mongoose |
-| **Frontend** | React 19 / Tailwind CSS / Bootstrap 5 |
-| **Real-time** | Socket.io (WebSockets) |
-| **Data Viz** | Recharts |
-| **File Handling**| Multer (Local Storage) |
-| **Auth** | JWT / Bcryptjs / Role-Based Access |
-| **UI Icons** | Lucide-React |
+### 1. Backend (Railway)
+1.  **Repository**: Connect your GitHub.
+2.  **Root Directory**: Set to `backend`.
+3.  **Build Command**: `npm install`
+4.  **Start Command**: `npm start`
+5.  **Environment Variables**:
+    - `MONGO_URI`: Your MongoDB Atlas connection string.
+    - `JWT_SECRET`: A secure random string.
+    - `CORS_ORIGIN`: Your frontend URL (e.g. `https://your-app.vercel.app`).
+    - `PORT`: 5000 (Railway will assign this automatically).
 
----
-
-## 🔄 How to Update & Maintain
-
-### 1. Modifying the Schema
-If you add or update a model (e.g., `backend/src/models/Invoice.js`), ensure you update the **ER Diagram** in `redme-relation.md` to keep documentation in sync.
-
-### 2. Handling File Uploads
-All files (Lessons/Assignments/Certificates) are stored in `backend/uploads/`.
-- Ensure this directory has write permissions.
-- In Docker, this is mapped as a persistent volume.
-
-### 3. Real-time Features
-To update real-time logic, modify the `io.on("connection")` block in `backend/src/server.js` and the corresponding hooks in the frontend `NotificationBell.js`.
-
-### 4. Testing & Deployment
-- **Backend Tests**: Run `npm test` in the `backend/` directory.
-- **UI Consistency**: Use the **Tailwind CSS** utility classes to maintain the premium SaaS aesthetic. Avoid adding inline styles.
+### 2. Frontend (Vercel)
+1.  **Repository**: Connect your GitHub.
+2.  **Root Directory**: Set to `frontend`.
+3.  **Framework Preset**: `Create React App`.
+4.  **Build Command**: `npm run build`.
+5.  **Output Directory**: `build`.
+6.  **Environment Variables**:
+    - `REACT_APP_API_URL`: `https://your-backend-url.up.railway.app/api`
 
 ---
 
-## 📂 Directory Structure
-- `backend/src/controllers/`: Business logic for all modules.
-- `backend/src/routes/`: API endpoint definitions.
-- `frontend/src/roles/`: Role-specific page implementations (Admin, Teacher, Student, Secretary).
-- `frontend/src/components/`: Reusable UI elements (Calendar, Charts, Notifications).
+## 🧩 Core Modules
+- **💳 Payment & Billing**: Full tuition management. Automatic discount application & partial payment tracking.
+- **📚 E-Learning Hub**: Digital classroom for lesson uploads, assignment submissions, and grading.
+- **📊 Advanced Analytics**: Real-time performance tracking using dynamic charts for attendance and grades.
+- **📢 Real-time Notifications**: Instant alerts via WebSockets for messages and events.
+- **🏛️ Role-Based Access**: Specialized portals for Admins, Teachers, Students, and Secretaries.
 
 ---
 
-> [!IMPORTANT]
-> To quickly populate the system with data, run `npm run seed:demo` in the `backend/` directory. This will generate sample users, invoices, lessons, and grades for testing.
-=======
-# school-sys-management
->>>>>>> 44c1a9dc94db7edcad802c0a31463087702bbcde
+## 🛠️ Local Development
+1. **Clone**: `git clone https://github.com/your-username/your-repo.git`
+2. **Backend**: `cd backend && npm install && npm run dev`
+3. **Frontend**: `cd frontend && npm install && npm start`
+4. **Seed Data**: `cd backend && node seed_all.js` (Populates 10+ records for testing)
+
+---
+
+## 🔒 Security & Best Practices
+- **No Docker Required**: Optimized for native Node.js execution on Railway/Vercel.
+- **Environment Isolation**: Sensitive keys are managed via `.env` files.
+- **Security Headers**: Powered by `helmet.js` and strict `CORS` policies.
+- **Scalable Real-time**: Socket.io configured for cross-domain stability.

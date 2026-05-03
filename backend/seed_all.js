@@ -8,87 +8,104 @@ const { Exam } = require("./src/models/Exam");
 const { TimetableEntry } = require("./src/models/TimetableEntry");
 const { Attendance } = require("./src/models/Attendance");
 const { Grade } = require("./src/models/Grade");
+const Invoice = require("./src/models/Invoice");
 const { env } = require("./src/utils/env");
 
 async function seed() {
   await mongoose.connect(env.MONGO_URI);
   console.log("Connected to MongoDB.");
 
-  // Delete all data except Admin
-  await Teacher.deleteMany({});
-  await ClassModel.deleteMany({});
-  await ModuleModel.deleteMany({});
-  await Student.deleteMany({});
-  await Exam.deleteMany({});
-  await TimetableEntry.deleteMany({});
-  await Attendance.deleteMany({});
-  await Grade.deleteMany({});
-  
-  await User.deleteMany({ role: { $ne: "admin" } });
-  const admin = await User.findOne({ role: "admin" });
+  console.log("Teacher model:", Teacher ? "Found" : "Missing");
 
-  console.log("Deleted old data. Starting seed...");
+  console.log("Clearing Teachers...");
+  await Teacher.deleteMany({});
+  console.log("Clearing Classes...");
+  await ClassModel.deleteMany({});
+  console.log("Clearing Modules...");
+  await ModuleModel.deleteMany({});
+  console.log("Clearing Students...");
+  await Student.deleteMany({});
+  console.log("Clearing Exams...");
+  await Exam.deleteMany({});
+  console.log("Clearing Timetable...");
+  await TimetableEntry.deleteMany({});
+  console.log("Clearing Attendance...");
+  await Attendance.deleteMany({});
+  console.log("Clearing Grades...");
+  await Grade.deleteMany({});
+  console.log("Clearing Invoices...");
+  await Invoice.deleteMany({});
+  console.log("Clearing non-admin Users...");
+  await User.deleteMany({ role: { $ne: "admin" } });
+
+  const admin = await User.findOne({ role: "admin" });
+  if (!admin) {
+    console.error("❌ Admin user not found. Please ensure SEED_ADMIN variables are set in .env.");
+    process.exit(1);
+  }
 
   const passwordHash = await User.hashPassword("password123");
 
-  // Create Users (Teachers)
-  const teacherUser1 = await User.create({ name: "Alice Teacher", email: "alice@school.com", passwordHash, role: "teacher" });
-  const teacherUser2 = await User.create({ name: "Bob Math Teacher", email: "bob@school.com", passwordHash, role: "teacher" });
-
-  // Create Teachers
-  const teacher1 = await Teacher.create({ user: teacherUser1._id, teacherId: "T001", department: "Science" });
-  const teacher2 = await Teacher.create({ user: teacherUser2._id, teacherId: "T002", department: "Math" });
-
-  // Create Classes
-  const classA = await ClassModel.create({ name: "Grade 10A", level: "10", academicYear: "2026/2027", homeroomTeacher: teacher1._id });
-  const classB = await ClassModel.create({ name: "Grade 11B", level: "11", academicYear: "2026/2027", homeroomTeacher: teacher2._id });
-
-  // Create Modules
-  const modPhysics = await ModuleModel.create({ code: "PHY101", name: "Physics Basics", credits: 4 });
-  const modMath = await ModuleModel.create({ code: "MAT201", name: "Advanced Math", credits: 5 });
-
-  // Create Users (Students)
-  const studentUser1 = await User.create({ name: "Charlie Student", email: "charlie@school.com", passwordHash, role: "student" });
-  const studentUser2 = await User.create({ name: "Diana Student", email: "diana@school.com", passwordHash, role: "student" });
-  const studentUser3 = await User.create({ name: "Evan Student", email: "evan@school.com", passwordHash, role: "student" });
-  
-  // Create Students
-  const student1 = await Student.create({ user: studentUser1._id, studentId: "S001", class: classA._id });
-  const student2 = await Student.create({ user: studentUser2._id, studentId: "S002", class: classA._id });
-  const student3 = await Student.create({ user: studentUser3._id, studentId: "S003", class: classB._id });
-
-  // Create Timetable
-  await TimetableEntry.create({ class: classA._id, module: modPhysics._id, teacher: teacher1._id, dayOfWeek: 1, startTime: "08:00", endTime: "10:00", room: "Room 101" });
-  await TimetableEntry.create({ class: classA._id, module: modMath._id, teacher: teacher2._id, dayOfWeek: 2, startTime: "10:00", endTime: "12:00", room: "Room 102" });
-  
-  // Create Exams
-  const exam1 = await Exam.create({ title: "Midterm Physics", date: new Date(), duration: 60, maxScore: 100, class: classA._id, module: modPhysics._id, teacher: teacher1._id, createdBy: admin._id });
-
-  // Create Attendance
-  await Attendance.create({
-    date: new Date(),
-    class: classA._id,
-    module: modPhysics._id,
-    teacher: teacher1._id,
-    createdBy: admin._id,
-    records: [
-      { student: student1._id, status: "present", note: "" },
-      { student: student2._id, status: "absent", note: "Sick" },
-    ]
+  // Secretary
+  await User.create({
+    name: "System Secretary",
+    email: "secretary@school.com",
+    passwordHash,
+    role: "secretary",
   });
 
-  // Create Grades
-  await Grade.create({ exam: exam1._id, student: student1._id, class: classA._id, module: modPhysics._id, score: 95, createdBy: admin._id });
-  await Grade.create({ exam: exam1._id, student: student2._id, class: classA._id, module: modPhysics._id, score: 88, createdBy: admin._id });
+  // Teachers
+  const teacherDepts = ["Mathematics", "Science", "Literature", "History"];
+  const teachers = [];
+  for (let i = 1; i <= 4; i++) {
+    const user = await User.create({ name: `Teacher ${i}`, email: `teacher${i}@school.com`, passwordHash, role: "teacher" });
+    const t = await Teacher.create({ user: user._id, teacherId: `T100${i}`, department: teacherDepts[i - 1] });
+    teachers.push(t);
+  }
 
-  console.log("Seeding complete!");
-  console.log("Teacher 1: alice@school.com / password123");
-  console.log("Target Student: diana@school.com (Student 2) / password123. Got an absence on Physics Basics.");
-  
+  // Classes
+  const classes = [];
+  const levels = ["10", "11", "12"];
+  for (let i = 0; i < 3; i++) {
+    const cls = await ClassModel.create({ name: `Grade ${levels[i]}A`, level: levels[i], academicYear: "2026/2027", homeroomTeacher: teachers[i]._id });
+    classes.push(cls);
+  }
+
+  // Modules
+  const moduleData = [
+    { code: "MATH101", name: "Calculus I", credits: 5 },
+    { code: "PHYS101", name: "General Physics", credits: 4 },
+    { code: "LIT202", name: "Modern Literature", credits: 3 },
+    { code: "HIST105", name: "World History", credits: 3 },
+    { code: "COMP500", name: "Intro to JS", credits: 5 },
+  ];
+  const modules = [];
+  for (const m of moduleData) {
+    modules.push(await ModuleModel.create(m));
+  }
+
+  // Students
+  const students = [];
+  for (let i = 1; i <= 10; i++) {
+    const user = await User.create({ name: `Student Name ${i}`, email: `student${i}@school.com`, passwordHash, role: "student" });
+    const cls = classes[i % 3];
+    const s = await Student.create({ user: user._id, studentId: `S2026-00${i}`, class: cls._id, discountType: i % 4 === 0 ? "percentage" : "none", discountValue: i % 4 === 0 ? 15 : 0 });
+    students.push(s);
+  }
+
+  // Invoices (10)
+  for (let i = 0; i < 10; i++) {
+    const student = students[i];
+    const amount = 1000 + (i * 50);
+    const discountAmount = student.discountType === "percentage" ? (amount * student.discountValue) / 100 : 0;
+    await Invoice.create({ student: student._id, title: "Semester Fees", amount, discountAmount, paidAmount: i % 2 === 0 ? (amount - discountAmount) : (i * 100), status: i % 2 === 0 ? "paid" : "partial", dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), createdBy: admin._id });
+  }
+
+  console.log("✅ Seeding Successful!");
   process.exit(0);
 }
 
 seed().catch(err => {
-  console.error(err);
+  console.error("❌ Seeding Failed:", err);
   process.exit(1);
 });

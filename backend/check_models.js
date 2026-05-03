@@ -1,0 +1,21 @@
+const { User } = require("./src/models/User");
+const { Teacher } = require("./src/models/Teacher");
+const { ClassModel } = require("./src/models/Class");
+const { ModuleModel } = require("./src/models/Module");
+const { Student } = require("./src/models/Student");
+const { Exam } = require("./src/models/Exam");
+const { TimetableEntry } = require("./src/models/TimetableEntry");
+const { Attendance } = require("./src/models/Attendance");
+const { Grade } = require("./src/models/Grade");
+const Invoice = require("./src/models/Invoice");
+
+console.log("User:", !!User);
+console.log("Teacher:", !!Teacher);
+console.log("ClassModel:", !!ClassModel);
+console.log("ModuleModel:", !!ModuleModel);
+console.log("Student:", !!Student);
+console.log("Exam:", !!Exam);
+console.log("TimetableEntry:", !!TimetableEntry);
+console.log("Attendance:", !!Attendance);
+console.log("Grade:", !!Grade);
+console.log("Invoice:", !!Invoice);
