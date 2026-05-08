@@ -54,40 +54,40 @@ export default function AdminCalendarPage() {
                 <div className="modal-body">
                   <div className="mb-3">
                     <label className="form-label small fw-semibold">Event Title</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      required
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      required 
                       value={formData.title}
-                      onChange={e => setFormData({ ...formData, title: e.target.value })}
+                      onChange={e => setFormData({...formData, title: e.target.value})}
                     />
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-semibold">Description</label>
-                    <textarea
-                      className="form-control"
+                    <textarea 
+                      className="form-control" 
                       rows="2"
                       value={formData.description}
-                      onChange={e => setFormData({ ...formData, description: e.target.value })}
+                      onChange={e => setFormData({...formData, description: e.target.value})}
                     ></textarea>
                   </div>
                   <div className="row">
                     <div className="col-md-6 mb-3">
                       <label className="form-label small fw-semibold">Date & Time</label>
-                      <input
-                        type="datetime-local"
-                        className="form-control"
-                        required
+                      <input 
+                        type="datetime-local" 
+                        className="form-control" 
+                        required 
                         value={formData.startDate}
-                        onChange={e => setFormData({ ...formData, startDate: e.target.value })}
+                        onChange={e => setFormData({...formData, startDate: e.target.value})}
                       />
                     </div>
                     <div className="col-md-6 mb-3">
                       <label className="form-label small fw-semibold">Event Type</label>
-                      <select
-                        className="form-select"
+                      <select 
+                        className="form-select" 
                         value={formData.type}
-                        onChange={e => setFormData({ ...formData, type: e.target.value })}
+                        onChange={e => setFormData({...formData, type: e.target.value})}
                       >
                         <option value="other">Other</option>
                         <option value="exam">Exam</option>
@@ -100,15 +100,15 @@ export default function AdminCalendarPage() {
                     <label className="form-label small fw-semibold d-block">Visible To</label>
                     {['student', 'teacher', 'admin', 'secretary'].map(role => (
                       <div key={role} className="form-check form-check-inline">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
+                        <input 
+                          className="form-check-input" 
+                          type="checkbox" 
                           checked={formData.targetRoles.includes(role)}
                           onChange={(e) => {
-                            const newRoles = e.target.checked
-                              ? [...formData.targetRoles, role]
+                            const newRoles = e.target.checked 
+                              ? [...formData.targetRoles, role] 
                               : formData.targetRoles.filter(r => r !== role);
-                            setFormData({ ...formData, targetRoles: newRoles });
+                            setFormData({...formData, targetRoles: newRoles});
                           }}
                         />
                         <label className="form-check-label small text-capitalize">{role}</label>

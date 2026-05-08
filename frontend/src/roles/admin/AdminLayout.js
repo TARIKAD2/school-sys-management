@@ -2,92 +2,113 @@ import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import NotificationBell from "../../components/NotificationBell";
-import MobileHeader from "../../components/mobile/MobileHeader";
-import MobileSidebar from "../../components/mobile/MobileSidebar";
-import BottomNav from "../../components/mobile/BottomNav";
-import { Users, BookOpen, Calendar, DollarSign, BarChart2, FileText, ClipboardList } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => setMobileSidebarOpen(!isMobileSidebarOpen);
-  const closeSidebar = () => setMobileSidebarOpen(false);
-
-  const menuLinks = [
-    { type: 'header', label: 'Management' },
-    { to: "/admin/students", label: "Students", icon: Users },
-    { to: "/admin/teachers", label: "Teachers", icon: Users },
-    { to: "/admin/classes", label: "Classes", icon: ClipboardList },
-    { to: "/admin/modules", label: "Modules", icon: BookOpen },
-    { to: "/admin/exams", label: "Exams", icon: FileText },
-    { to: "/admin/timetable", label: "Timetable", icon: Calendar },
-    { to: "/admin/attendance", label: "Attendance", icon: Calendar },
-    { to: "/admin/payments", label: "Finance", icon: DollarSign },
-    { to: "/admin/analytics", label: "Analytics", icon: BarChart2 },
-    { to: "/admin/calendar", label: "Calendar", icon: Calendar },
-    { to: "/admin/documents", label: "Documents", icon: FileText },
-    { to: "/admin/reports", label: "Reports", icon: FileText }
-  ];
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
-    <div className="d-flex" style={{ minHeight: "100vh", position: "relative" }}>
-      
-      {/* Mobile-Only Overlays & Navigation */}
-      <MobileSidebar 
-        isOpen={isMobileSidebarOpen} 
-        onClose={closeSidebar} 
-        links={menuLinks} 
-        roleTitle="Admin Panel" 
-      />
-      <MobileHeader onMenuClick={toggleSidebar} title="Admin Portal" />
-      <BottomNav onMenuClick={toggleSidebar} />
+    <div className="d-flex flex-column flex-md-row" style={{ minHeight: "100vh" }}>
+      {/* Mobile Top Navbar */}
+      <div className="d-md-none d-flex justify-content-between align-items-center p-3 bg-white border-bottom sticky-top" style={{ zIndex: 1040, top: 0 }}>
+        <div className="fw-bold fs-5 text-primary">Admin Panel</div>
+        <div className="d-flex align-items-center gap-3">
+          <NotificationBell />
+          <button className="btn btn-light p-1 d-flex align-items-center justify-content-center" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
 
-      {/* Desktop Sidebar (Hidden on mobile) */}
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-md-none" 
+          style={{ zIndex: 1045 }}
+          onClick={closeSidebar}
+        ></div>
+      )}
+
+      {/* Sidebar */}
       <aside 
-        className="border-end bg-light d-none d-md-block shadow-sm"
-        style={{ width: 260, position: 'relative', height: '100vh', left: 0, top: 0 }}
+        className={`border-end bg-light d-flex flex-column transition-all ${isSidebarOpen ? 'position-fixed start-0 top-0 h-100 shadow' : 'd-none d-md-flex'}`} 
+        style={{ width: 260, zIndex: 1050 }}
       >
         <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
           <div>
-            <div className="fw-bold fs-5">Admin Panel</div>
+            <div className="fw-bold">Admin Panel</div>
             <div className="small text-muted">{user?.email}</div>
           </div>
+          <button className="btn btn-light d-md-none p-1 d-flex align-items-center justify-content-center" onClick={closeSidebar}>
+            <X size={20} />
+          </button>
         </div>
-        <nav className="p-2 py-3" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 70px)' }}>
+        <nav className="p-2 flex-grow-1 overflow-auto" onClick={(e) => { if (e.target.closest('a')) closeSidebar(); }}>
           <NavLink className="nav-link" to="/admin/dashboard">
             Dashboard
           </NavLink>
-          {menuLinks.map((link, idx) => (
-            link.type === 'header' ? (
-              <div key={idx} className="text-uppercase small text-muted mt-4 px-3 mb-2" style={{ fontSize: '0.7rem', letterSpacing: '1px' }}>
-                {link.label}
-              </div>
-            ) : (
-              <NavLink key={idx} className="nav-link" to={link.to}>
-                {link.label}
-              </NavLink>
-            )
-          ))}
+          <div className="text-uppercase small text-muted mt-3 px-3">Management</div>
+          <NavLink className="nav-link" to="/admin/students">
+            Students
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/teachers">
+            Teachers
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/classes">
+            Classes
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/modules">
+            Modules
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/exams">
+            Exams
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/timetable">
+            Timetable
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/attendance">
+            Attendance
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/payments">
+            Finance
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/analytics">
+            Analytics
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/calendar">
+            Calendar
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/documents">
+            Documents
+          </NavLink>
+          <NavLink className="nav-link" to="/admin/reports">
+            Reports
+          </NavLink>
         </nav>
+        <div className="p-3 border-top d-md-none">
+          <button className="btn btn-outline-danger w-100 fw-bold" onClick={logout}>
+            Logout
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-grow-1 overflow-hidden pb-16 md:pb-0 pt-14 md:pt-0">
-        <header className="border-bottom bg-white shadow-sm sticky-top d-none d-md-block">
+      <main className="flex-grow-1 w-100 overflow-hidden d-flex flex-column">
+        <div className="border-bottom bg-white d-none d-md-block">
           <div className="container-fluid py-2 d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center gap-3">
-              <div className="fw-semibold">Professional School Management</div>
-            </div>
+            <div className="fw-semibold">Professional School Management System</div>
             <div className="d-flex align-items-center gap-3">
               <NotificationBell />
-              <button className="btn btn-outline-danger btn-sm px-3" onClick={logout}>
+              <button className="btn btn-outline-danger btn-sm" onClick={logout}>
                 Logout
               </button>
             </div>
           </div>
-        </header>
-        <div className="container-fluid py-4 h-100" style={{ overflowY: 'auto' }}>
+        </div>
+        <div className="container-fluid py-3 flex-grow-1 table-responsive-box">
           <Outlet />
         </div>
       </main>

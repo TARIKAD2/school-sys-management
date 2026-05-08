@@ -43,7 +43,7 @@ export default function AdminPaymentsPage() {
     return () => clearTimeout(timer);
   }, [q]);
 
-  const filteredStudents = (students || []).filter(s =>
+  const filteredStudents = (students || []).filter(s => 
     s.user?.name?.toLowerCase().includes(studentSearch.toLowerCase()) ||
     s.studentId?.toLowerCase().includes(studentSearch.toLowerCase())
   );
@@ -76,19 +76,19 @@ export default function AdminPaymentsPage() {
         <div className="d-flex gap-2 flex-grow-1 justify-content-md-end" style={{ maxWidth: '600px' }}>
           <div className="position-relative flex-grow-1">
             <Search className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" size={16} />
-            <input
-              className="form-control ps-5 border-0 shadow-sm rounded-pill py-2"
+            <input 
+              className="form-control ps-5 border-0 shadow-sm rounded-pill py-2" 
               placeholder="Search by student name or ID..."
               value={q}
               onChange={(e) => setQ(e.target.value)}
               autoComplete="off"
             />
           </div>
-          <button
+          <button 
             className="btn btn-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2 fw-bold"
             onClick={() => {
-              setStudentSearch("");
-              setShowModal(true);
+               setStudentSearch("");
+               setShowModal(true);
             }}
           >
             <Plus size={18} /> New Invoice
@@ -140,8 +140,8 @@ export default function AdminPaymentsPage() {
                   <tr key={inv._id}>
                     <td className="px-4 py-3">
                       <div className="d-flex align-items-center gap-3">
-                        <div
-                          className="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                        <div 
+                          className="bg-light rounded-circle d-flex align-items-center justify-content-center" 
                           style={{ width: 32, height: 32 }}
                         >
                           <User size={16} className="text-muted" />
@@ -161,9 +161,10 @@ export default function AdminPaymentsPage() {
                     <td className="py-3 fw-bold">${inv.amount.toLocaleString()}</td>
                     <td className="py-3 text-muted">{new Date(inv.dueDate).toLocaleDateString()}</td>
                     <td className="py-3">
-                      <span className={`badge rounded-pill px-3 py-2 ${inv.status === 'paid' ? 'bg-success-subtle text-success' :
-                          inv.status === 'pending' ? 'bg-warning-subtle text-warning' : 'bg-danger-subtle text-danger'
-                        }`}>
+                      <span className={`badge rounded-pill px-3 py-2 ${
+                        inv.status === 'paid' ? 'bg-success-subtle text-success' :
+                        inv.status === 'pending' ? 'bg-warning-subtle text-warning' : 'bg-danger-subtle text-danger'
+                      }`}>
                         {inv.status.toUpperCase()}
                       </span>
                     </td>
@@ -198,22 +199,22 @@ export default function AdminPaymentsPage() {
                   <div className="mb-3">
                     <label className="form-label small fw-semibold">Select Student</label>
                     <div className="position-relative mb-2">
-                      <Search className="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" size={14} />
-                      <input
-                        type="text"
-                        className="form-control form-control-sm ps-4"
-                        placeholder="Type to search student..."
-                        value={studentSearch}
-                        onChange={e => setStudentSearch(e.target.value)}
-                        autoComplete="off"
-                      />
+                       <Search className="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" size={14} />
+                       <input 
+                         type="text" 
+                         className="form-control form-control-sm ps-4" 
+                         placeholder="Type to search student..."
+                         value={studentSearch}
+                         onChange={e => setStudentSearch(e.target.value)}
+                         autoComplete="off"
+                       />
                     </div>
-                    <select
-                      className="form-select"
-                      required
+                    <select 
+                      className="form-select" 
+                      required 
                       size={5}
                       value={formData.studentId}
-                      onChange={e => setFormData({ ...formData, studentId: e.target.value })}
+                      onChange={e => setFormData({...formData, studentId: e.target.value})}
                     >
                       <option value="">{filteredStudents.length > 0 ? "Choose a student..." : "No students found"}</option>
                       {filteredStudents.map(s => (
@@ -223,33 +224,33 @@ export default function AdminPaymentsPage() {
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-semibold">Description</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      required
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      required 
                       value={formData.title}
-                      onChange={e => setFormData({ ...formData, title: e.target.value })}
+                      onChange={e => setFormData({...formData, title: e.target.value})}
                     />
                   </div>
                   <div className="row">
                     <div className="col-md-6 mb-3">
                       <label className="form-label small fw-semibold">Amount ($)</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        required
+                      <input 
+                        type="number" 
+                        className="form-control" 
+                        required 
                         value={formData.amount}
-                        onChange={e => setFormData({ ...formData, amount: e.target.value })}
+                        onChange={e => setFormData({...formData, amount: e.target.value})}
                       />
                     </div>
                     <div className="col-md-6 mb-3">
                       <label className="form-label small fw-semibold">Due Date</label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        required
+                      <input 
+                        type="date" 
+                        className="form-control" 
+                        required 
                         value={formData.dueDate}
-                        onChange={e => setFormData({ ...formData, dueDate: e.target.value })}
+                        onChange={e => setFormData({...formData, dueDate: e.target.value})}
                       />
                     </div>
                   </div>

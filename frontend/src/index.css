@@ -23,6 +23,62 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/* Base structural fixes for responsiveness */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Auto-responsive table containers */
+.table-responsive-box {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px; /* Better fit for mobile screens */
+  }
+  
+  .card {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  /* Make buttons more touch-friendly */
+  .btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 44px; /* Apple HCI guidelines touch target minimum */
+  }
+  
+  /* Inputs touch friendly */
+  .form-control, .form-select {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+  
+  /* Headings scale down */
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  
+  /* Ensure padding isn't excessive */
+  .container-fluid {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+}
+
 /* Background gradient for the whole app */
 #root {
   min-height: 100vh;
@@ -161,54 +217,4 @@ h6 {
   font-size: 0.75rem;
   letter-spacing: 0.5px;
   border-top: none;
-}
-
-/* Mobile responsiveness refinements & Touch targets */
-@media (max-width: 768px) {
-  .container-fluid {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-  
-  .card-body {
-    padding: 1.25rem !important;
-  }
-  
-  h1, .h1 { font-size: 1.75rem; }
-  h2, .h2 { font-size: 1.5rem; }
-  h3, .h3 { font-size: 1.25rem; }
-  
-  .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    min-height: 44px; /* Touch friendly */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .form-control, .form-select {
-    min-height: 44px; /* Touch friendly inputs */
-  }
-
-  /* Make tables and table rows more touch friendly */
-  .table> :not(caption)>*>* {
-    padding: 0.85rem 0.5rem;
-  }
-}
-
-/* Custom scrollbar for better look */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
 }
