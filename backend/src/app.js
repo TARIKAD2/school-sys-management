@@ -18,7 +18,6 @@ const examRoutes = require("./routes/exams.routes");
 const attendanceRoutes = require("./routes/attendance.routes");
 const gradesRoutes = require("./routes/grades.routes");
 const timetableRoutes = require("./routes/timetable.routes");
-const reportsRoutes = require("./routes/reports.routes");
 const demandRoutes = require("./routes/demands.routes");
 const paymentsRoutes = require("./routes/payments.routes");
 const elearningRoutes = require("./routes/elearning.routes");
@@ -32,10 +31,7 @@ const app = express();
 app.set("trust proxy", 1);
 
 app.use(cors({
-  origin: [
-    "https://school-sys-management.vercel.app",
-    "http://localhost:3000"
-  ],
+  origin: env.CORS_ORIGIN ? env.CORS_ORIGIN.split(",") : ["http://localhost:3000"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
@@ -77,7 +73,6 @@ app.use("/api/exams", examRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/grades", gradesRoutes);
 app.use("/api/timetable", timetableRoutes);
-app.use("/api/reports", reportsRoutes);
 app.use("/api/demands", demandRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/elearning", elearningRoutes);

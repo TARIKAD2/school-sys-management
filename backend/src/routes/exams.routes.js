@@ -15,7 +15,7 @@ const CreateSchema = z.object({
   date: z.string().min(1),
 });
 
-router.get("/", requireAuth, requireRole("admin", "teacher", "student"), async (req, res) => {
+router.get("/", requireAuth, requireRole("admin", "teacher", "student", "secretary"), async (req, res) => {
   const { page, limit, skip } = parsePagination(req.query);
   const sort = parseSort(req.query.sort);
 
@@ -46,7 +46,7 @@ router.get("/", requireAuth, requireRole("admin", "teacher", "student"), async (
   res.json({ items, page, limit, total, pages: Math.ceil(total / limit) });
 });
 
-router.get("/:id", requireAuth, requireRole("admin", "teacher", "student"), async (req, res) => {
+router.get("/:id", requireAuth, requireRole("admin", "teacher", "student", "secretary"), async (req, res) => {
   const item = await Exam.findById(req.params.id)
     .populate("module", "code name")
     .populate("class", "name level academicYear")
@@ -55,7 +55,7 @@ router.get("/:id", requireAuth, requireRole("admin", "teacher", "student"), asyn
   res.json({ item });
 });
 
-router.post("/", requireAuth, requireRole("admin", "teacher"), async (req, res) => {
+router.post("/", requireAuth, requireRole("admin", "teacher", "secretary"), async (req, res) => {
   const parsed = CreateSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: formatZodError(parsed.error) });
   const { title, moduleId, classId, date } = parsed.data;
@@ -72,7 +72,7 @@ router.post("/", requireAuth, requireRole("admin", "teacher"), async (req, res) 
 
 const UpdateSchema = CreateSchema.partial();
 
-router.put("/:id", requireAuth, requireRole("admin", "teacher"), async (req, res) => {
+router.put("/:id", requireAuth, requireRole("admin", "teacher", "secretary"), async (req, res) => {
   const parsed = UpdateSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: formatZodError(parsed.error) });
   const updates = parsed.data;

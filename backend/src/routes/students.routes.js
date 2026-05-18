@@ -6,6 +6,7 @@ const { Student } = require("../models/Student");
 const { User } = require("../models/User");
 const { parsePagination, parseSort, buildSearchFilter } = require("../utils/apiFeatures");
 const { formatZodError } = require("../utils/validation");
+const { teacherRBAC } = require("../middleware/rbac");
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ const CreateStudentSchema = z.object({
   address: z.string().optional(),
 });
 
-router.get("/", requireAuth, requireRole("admin", "teacher", "secretary"), async (req, res) => {
+router.get("/", requireAuth, requireRole("admin", "teacher", "secretary"), teacherRBAC, async (req, res) => {
   const { page, limit, skip } = parsePagination(req.query);
   const sortRaw = String(req.query.sort || "-createdAt");
 
@@ -31,6 +32,10 @@ router.get("/", requireAuth, requireRole("admin", "teacher", "secretary"), async
     } catch {
       filter.class = String(req.query.classId);
     }
+  }
+
+  if (req.user.role === "teacher") {
+    filter.class = { $in: req.teacherAssignments.classes.map(c => new mongoose.Types.ObjectId(String(c))) };
   }
 
   const q = req.query.q ? String(req.query.q).trim() : "";
@@ -127,7 +132,7 @@ router.get("/:id", requireAuth, requireRole("admin", "teacher", "secretary"), as
   res.json({ student });
 });
 
-router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
+router.post("/", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const parsed = CreateStudentSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: formatZodError(parsed.error) });
 
@@ -166,7 +171,7 @@ const UpdateStudentSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
-router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
+router.put("/:id", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const parsed = UpdateStudentSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: formatZodError(parsed.error) });
 

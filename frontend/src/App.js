@@ -15,11 +15,9 @@ import ClassesPage from "./roles/admin/pages/ClassesPage";
 import ModulesPage from "./roles/admin/pages/ModulesPage";
 import ExamsPage from "./roles/admin/pages/ExamsPage";
 import TimetablePage from "./roles/admin/pages/TimetablePage";
-import ReportsPage from "./roles/admin/pages/ReportsPage";
 import AdminAttendancePage from "./roles/admin/pages/AdminAttendancePage";
 import AdminPaymentsPage from "./roles/admin/pages/AdminPaymentsPage";
 import AdminAnalyticsPage from "./roles/admin/pages/AdminAnalyticsPage";
-import AdminCalendarPage from "./roles/admin/pages/AdminCalendarPage";
 import TeacherDashboard from "./roles/teacher/pages/TeacherDashboard";
 import TeacherSchedulePage from "./roles/teacher/pages/TeacherSchedulePage";
 import StudentDashboard from "./roles/student/pages/StudentDashboard";
@@ -73,9 +71,6 @@ function App() {
               <Route path="attendance" element={<AdminAttendancePage />} />
                <Route path="payments" element={<AdminPaymentsPage />} />
                <Route path="analytics" element={<AdminAnalyticsPage />} />
-               <Route path="calendar" element={<AdminCalendarPage />} />
-               <Route path="documents" element={<DocumentCenterPage />} />
-               <Route path="reports" element={<ReportsPage />} />
             </Route>
           </Route>
 
@@ -89,7 +84,6 @@ function App() {
                <Route path="grades" element={<TeacherGradesPage />} />
                <Route path="messages" element={<TeacherMessagesPage />} />
                <Route path="elearning" element={<TeacherELearningPage />} />
-               <Route path="documents" element={<DocumentCenterPage />} />
              </Route>
           </Route>
 
@@ -111,6 +105,11 @@ function App() {
           <Route element={<ProtectedRoute roles={["secretary"]} />}>
             <Route path="/secretary" element={<SecretaryLayout />}>
               <Route path="dashboard" element={<SecretaryDashboard />} />
+              <Route path="students" element={<StudentsPage />} />
+              <Route path="teachers" element={<TeachersPage />} />
+              <Route path="classes" element={<ClassesPage />} />
+              <Route path="modules" element={<ModulesPage />} />
+              <Route path="exams" element={<ExamsPage />} />
               <Route path="attendance" element={<SecretaryAttendancePage />} />
               <Route path="demands" element={<SecretaryDemandsPage />} />
               <Route path="finance" element={<SecretaryFinancePage />} />

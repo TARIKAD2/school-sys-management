@@ -130,7 +130,7 @@ router.put("/:id/records", requireAuth, requireRole("admin", "teacher", "secreta
   res.json({ item });
 });
 
-router.delete("/:id", requireAuth, requireRole("admin", "teacher"), teacherRBAC, async (req, res) => {
+router.delete("/:id", requireAuth, requireRole("admin", "teacher", "secretary"), teacherRBAC, async (req, res) => {
   const item = await Attendance.findById(req.params.id);
   if (!item) return res.status(404).json({ message: "Not found" });
 

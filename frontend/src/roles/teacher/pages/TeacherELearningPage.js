@@ -8,7 +8,12 @@ export default function TeacherELearningPage() {
   const [lessons, setLessons] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(null); // 'lesson' or 'assignment'
+  const [showModal, setShowModal] = useState(null); // 'lesson' or 'assignment' or 'review'
+  const [reviewAssignment, setReviewAssignment] = useState(null);
+  const [submissions, setSubmissions] = useState([]);
+  const [gradingSub, setGradingSub] = useState(null);
+  const [gradeInput, setGradeInput] = useState('');
+  const [feedbackInput, setFeedbackInput] = useState('');
 
   const fetchData = async () => {
     try {
@@ -152,9 +157,21 @@ export default function TeacherELearningPage() {
                           <div className="small text-muted text-truncate mb-3">{asg.instructions}</div>
                           <div className="d-flex justify-content-between align-items-center">
                             <div className="small d-flex align-items-center gap-1 text-muted">
-                              <Users size={14} /> 12 Submissions
+                              <Users size={14} /> Submissions Review
                             </div>
-                            <button className="btn btn-outline-primary btn-sm">Review</button>
+                            <button 
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={async () => {
+                                setReviewAssignment(asg);
+                                setShowModal('review');
+                                try {
+                                  const res = await api.get(`/elearning/submissions?assignmentId=${asg._id}`);
+                                  setSubmissions(res.data.data);
+                                } catch (e) {
+                                  console.error("Failed to load submissions");
+                                }
+                              }}
+                            >Review</button>
                           </div>
                         </div>
                       ))}
@@ -167,7 +184,7 @@ export default function TeacherELearningPage() {
         </div>
       </div>
 
-      {showModal && (
+      {(showModal === 'lesson' || showModal === 'assignment') && (
         <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content border-0 shadow">
@@ -212,6 +229,108 @@ export default function TeacherELearningPage() {
           </div>
         </div>
       )}
+
+      {showModal === 'review' && reviewAssignment && (
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content border-0 shadow">
+              <div className="modal-header">
+                <h5 className="modal-title fw-bold">Review Submissions: {reviewAssignment.title}</h5>
+                <button type="button" className="btn-close" onClick={() => { setShowModal(null); setReviewAssignment(null); setGradingSub(null); }}></button>
+              </div>
+              <div className="modal-body">
+                {submissions.length === 0 ? (
+                  <p className="text-center text-muted p-4">No submissions yet.</p>
+                ) : (
+                  <div className="table-responsive">
+                    <table className="table align-middle">
+                      <thead className="bg-light">
+                        <tr>
+                          <th>Student / Class</th>
+                          <th>File</th>
+                          <th>Status</th>
+                          <th>Grade & Feedback</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {submissions.map(sub => (
+                          <tr key={sub._id}>
+                            <td>
+                              <div className="fw-semibold">{sub.student?.user?.name || "Unknown"}</div>
+                              <div className="small text-muted">{sub.student?.class?.name || "No Class"}</div>
+                            </td>
+                            <td>
+                              {sub.fileUrl ? (
+                                <a href={`${BASE_URL}${sub.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-light">View File</a>
+                              ) : (
+                                <span className="small text-muted text-truncate d-block" style={{maxWidth: '150px'}}>{sub.content}</span>
+                              )}
+                            </td>
+                            <td>
+                              {sub.status === 'graded' ? (
+                                <span className="badge bg-success-subtle text-success">Graded</span>
+                              ) : (
+                                <span className="badge bg-warning-subtle text-warning">Pending</span>
+                              )}
+                            </td>
+                            <td>
+                              {gradingSub === sub._id ? (
+                                <div className="d-flex flex-column gap-2">
+                                  <input 
+                                    type="number" 
+                                    className="form-control form-control-sm" 
+                                    placeholder="Grade (0-20)" 
+                                    value={gradeInput}
+                                    onChange={e => setGradeInput(e.target.value)}
+                                  />
+                                  <input 
+                                    type="text" 
+                                    className="form-control form-control-sm" 
+                                    placeholder="Feedback" 
+                                    value={feedbackInput}
+                                    onChange={e => setFeedbackInput(e.target.value)}
+                                  />
+                                  <div className="d-flex gap-1">
+                                    <button 
+                                      className="btn btn-sm btn-success flex-grow-1"
+                                      onClick={async () => {
+                                        try {
+                                          await api.patch(`/elearning/submissions/${sub._id}/grade`, { grade: Number(gradeInput), feedback: feedbackInput });
+                                          const res = await api.get(`/elearning/submissions?assignmentId=${reviewAssignment._id}`);
+                                          setSubmissions(res.data.data);
+                                          setGradingSub(null);
+                                        } catch (e) { alert("Failed to grade"); }
+                                      }}
+                                    >Save</button>
+                                    <button className="btn btn-sm btn-light" onClick={() => setGradingSub(null)}>Cancel</button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div>
+                                  {sub.status === 'graded' ? (
+                                    <>
+                                      <div className="fw-bold">{sub.grade}/20</div>
+                                      <div className="small text-muted">{sub.feedback}</div>
+                                      <button className="btn btn-sm btn-link p-0 mt-1" onClick={() => { setGradingSub(sub._id); setGradeInput(sub.grade); setFeedbackInput(sub.feedback || ''); }}>Edit</button>
+                                    </>
+                                  ) : (
+                                    <button className="btn btn-sm btn-outline-primary" onClick={() => { setGradingSub(sub._id); setGradeInput(''); setFeedbackInput(''); }}>Grade</button>
+                                  )}
+                                </div>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

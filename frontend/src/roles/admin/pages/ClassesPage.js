@@ -27,7 +27,7 @@ function ClassModal({ open, mode, item, teachers, onClose, onSaved }) {
   const isCreate = mode === "create";
   const isView = mode === "view";
 
-  const [form, setForm] = useState({ name: "", level: "", academicYear: "", homeroomTeacherId: "" });
+  const [form, setForm] = useState({ name: "", level: "", academicYear: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -41,10 +41,9 @@ function ClassModal({ open, mode, item, teachers, onClose, onSaved }) {
         name: item.name || "",
         level: item.level || "",
         academicYear: item.academicYear || "",
-        homeroomTeacherId: item.homeroomTeacher?._id || "",
       });
     } else {
-      setForm({ name: "", level: "", academicYear: "", homeroomTeacherId: "" });
+      setForm({ name: "", level: "", academicYear: "" });
     }
   }, [open, item, isEdit, isView]);
 
@@ -60,14 +59,12 @@ function ClassModal({ open, mode, item, teachers, onClose, onSaved }) {
           name: form.name,
           level: form.level || undefined,
           academicYear: form.academicYear || undefined,
-          homeroomTeacherId: form.homeroomTeacherId || undefined,
         });
       } else if (isEdit && item) {
         await api.put(`/classes/${item._id}`, {
           name: form.name,
           level: form.level || undefined,
           academicYear: form.academicYear || undefined,
-          homeroomTeacherId: form.homeroomTeacherId || undefined,
         });
       }
       setSuccess("Saved successfully.");
@@ -122,22 +119,6 @@ function ClassModal({ open, mode, item, teachers, onClose, onSaved }) {
                   value={form.academicYear}
                   onChange={(e) => setForm((f) => ({ ...f, academicYear: e.target.value }))}
                 />
-              </div>
-              <div className="col-12 col-md-6">
-                <label className="form-label">Homeroom teacher</label>
-                <select
-                  className="form-select"
-                  disabled={isView}
-                  value={form.homeroomTeacherId}
-                  onChange={(e) => setForm((f) => ({ ...f, homeroomTeacherId: e.target.value }))}
-                >
-                  <option value="">(none)</option>
-                  {teachers.map((t) => (
-                    <option value={t._id} key={t._id}>
-                      {t.user?.name} ({t.teacherId})
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
           </div>
@@ -295,7 +276,6 @@ export default function ClassesPage() {
                     <th>
                       <SortHeader label="Academic year" field="academicYear" sort={sort} setSort={setSort} />
                     </th>
-                    <th>Homeroom teacher</th>
                     <th className="text-end">Actions</th>
                   </tr>
                 </thead>
@@ -305,7 +285,6 @@ export default function ClassesPage() {
                       <td className="fw-semibold">{c.name}</td>
                       <td>{c.level || <span className="text-muted">—</span>}</td>
                       <td>{c.academicYear || <span className="text-muted">—</span>}</td>
-                      <td>{c.homeroomTeacher?.user?.name || <span className="text-muted">—</span>}</td>
                       <td className="text-end">
                         <div className="btn-group btn-group-sm">
                           <button

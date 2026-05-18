@@ -91,13 +91,13 @@ router.get("/me", requireAuth, requireRole("teacher"), async (req, res) => {
   res.json({ teacher });
 });
 
-router.get("/:id", requireAuth, requireRole("admin"), async (req, res) => {
+router.get("/:id", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const teacher = await Teacher.findById(req.params.id).populate("user");
   if (!teacher) return res.status(404).json({ message: "Not found" });
   res.json({ teacher });
 });
 
-router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
+router.post("/", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const parsed = CreateTeacherSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: formatZodError(parsed.error) });
 
@@ -132,7 +132,7 @@ const UpdateTeacherSchema = z.object({
   assignedModules: z.array(z.string()).optional(),
 });
 
-router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
+router.put("/:id", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const parsed = UpdateTeacherSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: formatZodError(parsed.error) });
 

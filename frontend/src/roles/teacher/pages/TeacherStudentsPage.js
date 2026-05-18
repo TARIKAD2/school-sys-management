@@ -23,10 +23,12 @@ export default function TeacherStudentsPage() {
     return p;
   }, [q, classId, page, limit, sort]);
 
-  // Load classes once
+  // Load teacher's assigned classes once, auto-select first
   useEffect(() => {
     api.get("/classes?limit=200&sort=name").then(({ data }) => {
-      setClasses(data.items || []);
+      const list = data.items || [];
+      setClasses(list);
+      // Do NOT auto-select; show all assigned students across classes by default
     }).catch(() => {});
   }, []);
 
@@ -94,7 +96,7 @@ export default function TeacherStudentsPage() {
                   setPage(1);
                 }}
               >
-                <option value="">All Classes</option>
+                <option value="">— My Classes —</option>
                 {classes.map((c) => (
                   <option key={c._id} value={c._id}>
                     {c.name}

@@ -56,7 +56,7 @@ router.get("/:id", requireAuth, requireRole("admin", "teacher", "student", "secr
   res.json({ item });
 });
 
-router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
+router.post("/", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const parsed = CreateSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: "Invalid input" });
   const { code, name, classId, teacherId } = parsed.data;
@@ -73,7 +73,7 @@ router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
 
 const UpdateSchema = CreateSchema.partial();
 
-router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
+router.put("/:id", requireAuth, requireRole("admin", "secretary"), async (req, res) => {
   const parsed = UpdateSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: "Invalid input" });
   const updates = parsed.data;
